@@ -1,0 +1,5 @@
+GIT
+
+ git config user.name "Ramesh Mani"
+ git config user.email "rmani@cloudera.com"
+
