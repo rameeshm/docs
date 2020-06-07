@@ -1,0 +1,72 @@
+SPARK HELP
+
+https://jira.cloudera.com/browse/CDPD-10247?page=com.atlassian.jira.plugin.system.issuetabpanels%3Aall-tabpanel
+
+
+CDPD
+mvn package -Dcdpd.build=true \
+  -Dsurefire.timeout=9600\
+  -Dmaven.test.error.ignore=true\
+  -Dmaven.test.failure.ignore=true\
+  -DskipTests
+
+HDP
+
+mvn -Phive -Phive-thriftserver -Pyarn -Phadoop-3.1 -Phadoop-cloud \
+  -Phwx-common -Pkafka-0-8 -Pbigtop-dist -Dsurefire.timeout=9600 \
+  -P-sparkr -Dskip -DskipTests package
+
+pom.xml
+<!-- ranger-raz depdendency -->
+<ranger.version>2.0.0.7.2.1.0-121</ranger.version>
+<jersey-bundle.version>1.9.13</jersey-bundle.version>
+
+<!-- CDPD-10247: Ranger Raz dependency jars -->
+<dependency>
+  <groupId>org.apache.ranger</groupId>
+  <artifactId>ranger-raz-hook-abfs</artifactId>
+  <version>${ranger.version}</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.ranger</groupId>
+  <artifactId>ranger-raz-intg</artifactId>
+  <version>${ranger.version}</version>
+</dependency>
+<dependency>
+  <groupId>com.sun.jersey</groupId>
+  <artifactId>jersey-bundle</artifactId>
+  <version>${jersey-bundle.version}</version>
+</dependency>
+<dependency>
+  <groupId>org.codehaus.jackson</groupId>
+  <artifactId>jackson-jaxrs</artifactId>
+  <version>${codehaus.jackson.version}</version>
+</dependency>
+
+shade
+<include>org.apache.ranger:ranger-raz-hook-abfs</include>
+<include>org.apache.ranger:ranger-raz-intg</include>
+<include>com.sun.jersey:jersey-bundle</include>
+relocate
+<relocation>
+  <pattern>org.apache.ranger</pattern>
+  <shadedPattern>${spark.shade.packageName}.ranger</shadedPattern>
+  <includes>
+    <include>org.apache.ranger.**</include>
+  </includes>
+</relocation>
+<relocation>
+  <pattern>com.sun.jersey</pattern>
+  <shadedPattern>${spark.shade.packageName}.ranger</shadedPattern>
+</relocation>
+<relocation>
+  <pattern>org.codehaus.jackson</pattern>
+  <shadedPattern>${spark.shade.packageName}.ranger</shadedPattern>
+</relocation>
+
+
+<exclusion>
+  <groupId>org.apache.ranger</groupId>
+  <artifactId>ranger-raz-hook-abfs</artifactId>
+</exclusion>
+
