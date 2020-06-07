@@ -1,0 +1,71 @@
+CURL
+
+# Get Service Def with id = 1
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://node-1.example.com:6080/service/public/v2/api/servicedef/1
+
+# Get all Service Defs
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://node-1.example.com:6080/service/public/v2/api/servicedef
+
+# Create a service def from JSON specification
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://node-1.example.com:6080/service/public/v2/api/servicedef -d @service_def_create.json
+
+# Update a service def from JSON specification
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X PUT http://node-1.example.com:6080/service/public/v2/api/servicedef/name/hdfs-101 -d @service_def_update.json
+
+# Delete a service def
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X DELETE http://node-1.example.com:6080/service/public/v2/api/servicedef/name/hdfs-101 
+
+# Get a service by id
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://node-1.example.com:6080/service/public/v2/api/service/24
+
+# Get a service by name
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://node-1.example.com:6080/service/public/v2/api/service/name/hadoopdev
+
+# Get all Services
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://node-1.example.com:6080/service/public/v2/api/service
+
+# Create a service from JSON specification
+# ui is set but Guid is the one given; version is automatically set but not policyversion; policyUpdateTime is not set
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://node-1.example.com:6080/service/public/v2/api/service -d @service_create.json
+
+# Update a service from JSON specification
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X PUT http://node-1.example.com:6080/service/public/v2/api/service/25 -d @service_update.json
+
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X PUT http://node-1.example.com:6080/service/public/v2/api/service/name/Test_Repo_Storm_Creation -d @service_update.json
+
+# Delete a service
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X DELETE http://node-1.example.com:6080/service/public/v2/api/service/25
+
+# Get one policy
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://node-1.example.com:6080/service/public/v2/api/policy/129
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://node-1.example.com:6080/service/public/v2/api/service/hadoopdev/policy/test_for_rest_curl
+
+   curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET `hostname -f`:6080/service/public/v2/api/policy/9
+
+
+
+   # Get all policies for a service
+
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://node-1.example.com:6080/service/public/v2/api/service/hadoopdev/policy
+
+# Create a policy
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://node-1.example.com:6080/service/public/v2/api/policy -d @policy_create.json
+
+# Update a policy
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X PUT http://node-1.example.com:6080/service/public/v2/api/policy/130 -d @policy_update.json
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X PUT http://node-1.example.com:6080/service/public/v2/api/service/hadoopdev/policy/test_for_rest_curl -d @policy_update.json
+
+# Delete a policy
+curl -u admin:admin -H "Accept: application/json" -H "Content-Type: application/json" -X DELETE http://node-1.example.com:6080/service/public/v2/api/policy?servicename=hadoopdev&policyname=test_for_rest
+
+
+IMPORT POLICIES
+curl -v -X POST -u "admin:admin" -H "Content-Type: multipart/form-data" -H "Content-Type: application/json" -F 'file=@Ranger_Policies_20170403_131421.json' http://ctr-e129-1487033772569-66527-01-000002.hwx.site:6080/service/plugins/policies/importPoliciesFromFile?isOverride=true&serviceType=hive
+
+
+CERT
+
+Using —CERT in CURL 
+1. keytool -importkeystore -srckeystore /etc/security/serverKeys/ranger-plugin-keystore.jks -destkeystore test.p12 -srcstorepass myKeyFilePassword -srcstoretype jks -deststoretype PKCS12 -srcalias rangerhdfsAgent -deststorepass Ranger@123 -destkeypass Ranger@123
+2. openssl pkcs12 -in test.p12 -out test.pem
+3. curl -i -k --negotiate -u: --cert test.pem:Ranger@123 'https://ds-xaagent-suse-failure-1.openstacklocal:6182/service/plugins/secure/policies/download/cl1_hadoop?lastKnownVersion=3&pluginId=hdfs@ds-xaagent-suse-failure-1.openstacklocal-cl1_hadoop'
