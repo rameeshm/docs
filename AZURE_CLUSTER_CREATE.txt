@@ -1,0 +1,436 @@
+
+AZURE CLUSTER
+
+
+CM GBN;
+http://builddb.infra.cloudera.com/query?product=CM&version=7.2.0&tag=L0_PASSED
+
+CDH GBN:
+http://builddb.infra.cloudera.com/query?product=CDH&version=7.2.0.0&tag=L0_PASSED
+
+
+TEST ENV
+
+1)
+Env URL: https://console.dps.mow-dev.cloudera.com//cloud/environments/details/spraz424/workloads
+
+CM Admin: https://10.102.50.38:7183/  (admin / 9dpml9ar7bsg1gaju6md11bn9)
+
+Ranger Admin: https://spraz424-dl-master1.spraz424.xcu2-8y8x.dev.cldr.work/spraz424-dl/cdp-proxy/ranger/
+
+ 
+
+2)
+
+Cluster details -
+DL Cluster : https://console.dps.mow-dev.cloudera.com/cloud/environments/details/mp-razdemo/datalake/mp-razdemo-dl/events
+Direct CM Link : https://10.102.50.53:7183/cmf/login
+Creds : admin / 4oi2iup4pk51lg7260pfe1niss
+DE Cluster : https://console.dps.mow-dev.cloudera.com/cloud/workloads/details/mp-razdemo-de/events
+
+
+
+
+razranger:
+ admin
+		a14j93lel08u72bb13bks0aol
+
+https://10.102.50.23:7183/cmf/services/1546335926/status
+
+NEW 7.2 V2 config
+
+admin / aoectj6sh55of9h12g73t2d3e
+
+NEW 7.2
+
+https://cloudera.dps.mow-dev.cloudera.com/cloud/environments/details/rmrazt1/datalake/rmrazt1-dl/events
+https://10.102.50.9:7183/cmf/login
+https://10.102.50.9:6182/index.html#!/policymanager/resource
+
+admin / 67q61fsp9t2vof2e57p5on58uv
+
+NEW 7.2 ( V2)
+
+https://10.102.50.55:7183/cmf/login
+
+admin/ 6o7bqiu5ised8mt4psp7d9idep
+OLD 7.1
+
+https://10.102.50.23:6182/index.html#!/service/13/policies/40/edit
+
+admin /a14j93lel08u72bb13bks0aol
+
+
+SSL CREATE
+
+/usr/lib/jvm/java/bin/java -cp '/opt/cloudera/parcels/CDH-7.1.1-1.cdh7.1.1.p0.2112574/lib/ranger-raz/libext/adls/processor/*'  org.apache.ranger.credentialapi.buildks create sslTrustStore -value cq3c00smf9tametaku3o7dtop -provider jceks://file/tmp/rangerpluginssl.jceks
+/usr/lib/jvm/java/bin/java -cp '/opt/cloudera/parcels/CDH-7.1.1-1.cdh7.1.1.p0.2112574/lib/ranger-raz/libext/adls/processor/*'  org.apache.ranger.credentialapi.buildks list -provider jceks://file/tmp/rangerpluginssl.jceks
+export HADOOP_ROOT_LOGGER=DEBUG,console
+
+
+https://quanta.infra.cloudera.com/?#/runDetails?gtn=1877263 (edited) 
+
+Relaunch Execution via Quasar tab
+Change cluster to common: wired_cluster_azure_systemtest
+Check Retain resources
+check Skip execution
+Check Untracked run
+U will receive an email with title: ‘Quasar execution request recieved’
+It will contain a Quanta link to your run
+
+
+AZURE cluster SETUP 
+https://github.infra.cloudera.com/gunnar/azure-setup
+
+   53  vi ~/.cdp/config
+   54  vi ./azure-setup/.cdp/config
+   70  view ./azure-setup/.git/config
+   75  vi ./.git/config
+   77  vi ~/.cdp/config
+  158  vi ~/.cdp/config
+  161  vi ~/.cdp/config
+  163  vi cdp
+  183  vi ~/.cdp/config
+  199  vi  ~/.cdp/credentials
+  209  vi  ~/.cdp/credentials
+~/Downloads/cloudbreak-azure.ppk
+  211  vi  ~/.cdp/credentials
+  285  Unable to get mappings: Error during IDBMMS operation: NOT_FOUND: No mappings found for environment crn:cdp:environments:us-west-1:9d74eee4-1cad-45d7-b645-7ccf9edbb73d:environment:c7baed07-2e3f-4e7c-a834-a3258a5e89bd
+  301  vi config.sh
+  315  vi config.sh
+  411  vi ./setup_env.sh
+
+ export CB_PROFILE=default
+export CDP_PROFILE=default
+
+
+HelperTest.groovy
+def key = getOAuthServiceURL().getUserDelegationKey(null, OffsetDateTime.now().plusDays(1)).blockingGet().body()
+
+
+APISpec.groovy
+
+
+def getOAuthServiceURL() {
+    String tenantId = getEnvironmentVariable("MICROSOFT_AD_TENANT_ID");
+    String servicePrincipalId = getEnvironmentVariable("ARM_CLIENTID");
+    String servicePrincipalKey = getEnvironmentVariable("ARM_CLIENTKEY");
+
+    def authority = String.format("https://login.microsoftonline.com/%s/oauth2/token",tenantId);
+    def credential = new ClientCredential(servicePrincipalId, servicePrincipalKey)
+    def token = new AuthenticationContext(authority, false, Executors.newFixedThreadPool(1)).acquireToken("https://storage.azure.com", credential, null).get().accessToken
+
+    return new ServiceURL(
+            new URL(String.format("https://%s.blob.core.windows.net/", primaryCreds.accountName)),
+            StorageURL.createPipeline(new TokenCredentials(token)))
+}
+
+
+SASTest.
+
+
+
+def cc = getContainerClientBuilder(primaryBlobServiceClient.getAccountUrl() + "/" + containerName + "?" + sas).buildClient()
+
+*********************
+
+storage account name
+rmaniblob
+key
+rlVl+FtfFduBgQCK91ngxVTIEn67kQN0jZ8GsXqEOT5TKEmeZ9Idq9SzoJAUDXNAumFNtTVzwV8X54trwdh2Sw==
+connection string:
+DefaultEndpointsProtocol=https;AccountName=rmaniblob;AccountKey=rlVl+FtfFduBgQCK91ngxVTIEn67kQN0jZ8GsXqEOT5TKEmeZ9Idq9SzoJAUDXNAumFNtTVzwV8X54trwdh2Sw==;EndpointSuffix=core.windows.net
+
+Steps to do GETTING UserDelegationKey:
+curl --negotiate -u : “https://srm-azure-dl-idbroker1.srm-azur.xcu2-8y8x.dev.cldr.work:8444/gateway/dt/knoxtoken/api/v1/token”
+
+Get delegation token for IDBROKER call to get AccessToken.
+
+DT=$(curl --negotiate -u : “https://srm-azure-dl-idbroker1.srm-azur.xcu2-8y8x.dev.cldr.work:8444/gateway/dt/knoxtoken/api/v1/token” | jq -r '.access_token')
+
+Get AccessToken from IDBroker.
+
+AT=$(curl -k -H “Authorization: Bearer $DT” ‘https://srm-azure-dl-idbroker1.srm-azur.xcu2-8y8x.dev.cldr.work:8444/gateway/azure-cab/cab/api/v1/credentials’ | jq -r ‘.access_token’)
+
+Get UserDelegationToken from Azure.
+curl -v -i -X POST -d @sasPost.xml -H "x-ms-version: 2018-11-09” -H "Authorization: Bearer $AT" "https://srmadls2.blob.core.windows.net/?restype=service&comp=userdelegationkey"
+
+<?xml version="1.0" encoding="utf-8"?>
+<KeyInfo>
+        <Expiry>2020-03-22T12:00:00Z</Expiry>
+</KeyInfo>
+
+
+DT=$(curl --negotiate -u : "https://vpazr711-dl-idbroker1.vpazr711.xcu2-8y8x.dev.cldr.work:8444/gateway/dt/knoxtoken/api/v1/token" | jq -r ‘.access_token’)
+
+AT=$(curl -k -H "Authorization: Bearer $DT" 'https://vpazr711-dl-idbroker1.vpazr711.xcu2-8y8x.dev.cldr.work:8444/gateway/azure-cab/cab/api/v1/credentials' | jq -r ‘.access_token’)
+
+curl -v -i -X POST -d @sasPost.xml -H "x-ms-version: 2018-11-09” -H "Authorization: Bearer $AT" "https://raztestsan.blob.core.windows.net/?restype=service&comp=userdelegationkey”
+
+Vel’s Cluster
+  112  kdestroy
+  113  kinit -kt /var/run/cloudera-scm-agent/process/1546354544-ranger_raz-RANGER_RAZ_SERVER/ranger_raz.keytab rangerraz/vpazr711-dl-master0.vpazr711.xcu2-8y8x.dev.cldr.work@VPAZR711.XCU2-8Y8X.DEV.CLDR.WORK
+  114  DT=$(curl --negotiate -u : "https://vpazr711-dl-idbroker1.vpazr711.xcu2-8y8x.dev.cldr.work:8444/gateway/dt/knoxtoken/api/v1/token" | jq -r '.access_token')
+  115  AT=$(curl -k -H "Authorization: Bearer $DT" 'https://vpazr711-dl-idbroker1.vpazr711.xcu2-8y8x.dev.cldr.work:8444/gateway/azure-cab/cab/api/v1/credentials' | jq -r '.access_token')
+  116  curl -v -i -X POST -d @/tmp/sasPost.xml -H "x-ms-version: 2018-11-09" -H "Authorization: Bearer $AT" "https://vpazr711san.blob.core.windows.net/?restype=service&comp=userdelegationkey"
+
+
+
+// NEW CLUSTER
+kinit -kt /var/run/cloudera-scm-agent/process/1546333719-ranger_raz-RANGER_RAZ_SERVER/ranger_raz.keytab rangerraz/sp-az-demo-dl-master1.sp-az-de.xcu2-8y8x.dev.cldr.work@SP-AZ-DE.XCU2-8Y8X.DEV.CLDR.WORK
+DT=$(curl --negotiate -u : "https://sp-az-demo-dl-idbroker0.sp-az-de.xcu2-8y8x.dev.cldr.work:8444/gateway/dt/knoxtoken/api/v1/token" | jq -r '.access_token')
+AT=$(curl -k -H "Authorization: Bearer $DT" 'https://sp-az-demo-dl-idbroker0.sp-az-de.xcu2-8y8x.dev.cldr.work:8444/gateway/azure-cab/cab/api/v1/credentials' | jq -r '.access_token')
+curl -v -i -X POST -d @/tmp/sasPost.xml -H "x-ms-version: 2018-11-09" -H "Authorization: Bearer $AT" "https://spazdemosan.blob.core.windows.net/?restype=service&comp=userdelegationkey”
+
+DT=$(curl --negotiate -u : "https://raztest-dl-idbroker1.raztest.xcu2-8y8x.dev.cldr.work:8444/gateway/dt/knoxtoken/api/v1/token"| jq -r '.access_token')
+AT=$(curl -k -H "Authorization: Bearer $DT" 'https://raztest-dl-idbroker1.raztest.xcu2-8y8x.dev.cldr.work:8444/gateway/azure-cab/cab/api/v1/credentials'| jq -r '.access_token’)
+curl -v -i -X POST -d @/tmp/sasPost.xml -H "x-ms-version: 2018-11-09” -H "Authorization: Bearer $AT" "https://razrangersan.blob.core.windows.net/?restype=service&comp=userdelegationkey"
+
+
+<?xml version="1.0" encoding="utf-8"?><UserDelegationKey><SignedOid>e86d1596-78eb-471f-9d78-6b7ce820ef33</SignedOid><SignedTid>f636e1c4-18a5-4f8a-9e41-e247bae1387d</SignedTid><SignedStart>2020-03-03T00:06:43Z</SignedStart><SignedExpiry>2020-03-05T12:00:00Z</SignedExpiry><SignedService>b</SignedService><SignedVersion>2018-11-09</SignedVersion><Value>dmcROm7/X5yvAFwU6u7JB6MSHjPQID9nm4maamBnMhE=</Value></UserDelegationKey
+
+
+hdfs dfs -Dfs.azure.sas.token.provider.type=org.apache.ranger.raz.processor.adls.RangerRazTokenProvider -Dfs.azure.account.auth.type=SAS -Dranger.raz.client.prefix=ranger.raz.client -Dranger.raz.client.rest.host.url=http://vpazr711-dl-master0.vpazr711.xcu2-8y8x.dev.cldr.work:6081 -Dranger.raz.client.user.principal=csso_spolavarapu -Dranger.raz.client.user.keytab.file=/home/cloudbreak/csso_spolavarapu.keytab -ls abfs://data@vpazr711san.dfs.core.windows.net
+
+https://vpazr711san.dfs.core.windows.net/data//?upn=false&action=getAccessControl&timeout=90&st=2020-02-25T02%3A25%3A04Z&sv=2018-11-09&ske=2020-02-25T02%3A25%3A04Z&sig=CmfvQUtZFF5bFMs1/msBkLbwtOKtL9BMeFrBkqlOMgo%3D&sktid=f636e1c4-18a5-4f8a-9e41-e247bae1387d&se=2020-02-25T02%3A25%3A04Z&skoid=e86d1596-78eb-471f-9d78-6b7ce820ef33&sks=b&sp=r&skt=2020-02-25T02%3A25%3A04Z&saoid=2d170119-c65f-4a8d-a9de-2d9ca57e2327&skv=2018-11-09&sr=b
+
+
+CLUSTER
+
+Hi team - I have created another azure env from my account (mow-dev). Please patch this environment to continue development/testing for demo while Raz communication in the QE env is fixed. 
+
+Env details - https://cloudera.dps.mow-dev.cloudera.com/cloud/environments/details/vpazr711/datalake/vpazr711-dl/events
+CM UI - https://vpazr711-dl-master0.vpazr711.xcu2-8y8x.dev.cldr.work/cmf
+Ranger UI - https://vpazr711-dl-master0.vpazr711.xcu2-8y8x.dev.cldr.work/vpazr711-dl/cdp-proxy/ranger/
+Ranger host (Raz also installed there) - 10.102.50.41 (use cloudbreak keypair to login as cloudbreak and then sudo). 
+Raz is installed on the same host as Ranger
+
+Ran the below on host 10.102.50.41. You can patch this env (both ABFS driver updates and Raz updates) to continue the demo setup. 
+[root@vpazr711-dl-master0 ranger]# kinit -kt /run/cloudera-scm-agent/process/1546332363-hdfs-NAMENODE/hdfs.keytab hdfs/vpazr711-dl-master0.vpazr711.xcu2-8y8x.dev.cldr.work
+[root@vpazr711-dl-master0 ranger]# hdfs dfs -ls abfs://data@vpazr711san.dfs.core.windows.net/
+Feb 23, 2020 9:24:14 PM org.apache.knox.gateway.shell.KnoxSession createClient
+INFO: Using default JAAS configuration
+Found 3 items
+drwxr-x---   - cb078736-a1c4-48eb-8347-65f4903e58c5 hdfs          0 2020-02-22 00:15 abfs://data@vpazr711san.dfs.core.windows.net/cluster-logs
+drwxr-xr-x   - 2f3f7e85-ceaf-47c2-898a-1cca8b7b5f06 hdfs          0 2020-02-22 00:52 abfs://data@vpazr711san.dfs.core.windows.net/ranger
+drwxr-xr-x   - 2f3f7e85-ceaf-47c2-898a-1cca8b7b5f06 hdfs          0 2020-02-22 00:52 abfs://data@vpazr711san.dfs.core.windows.net/warehouse
+[root@vpazr711-dl-master0 ranger]#
+
+Thanks,
+Vel
+
+CM:
+admin:5gcduahundohq16to9kk0hiu85
+
+
+
+ACCESS TOKEN:
+
+{"access_token":"eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYW5nZXJyYXoiLCJhdWQiOiJpZGJyb2tlciIsImlzcyI6IktOT1hTU08iLCJleHAiOjE1ODM1MjM1Njh9.W3DWzjXycI8GcGntqCmeju7YGqB9jie98va6fAHV7zRmHsUuJPQfrt7KpgyjvCytjG8ybw472gPOqalSQ8ISmcplyQLSxTpQAwXSoWtyPABOxbDHhQ5Zym-5VuMxzzVDh02RpN5SlJv0EgJmpULtMs8ddPWjKKSXm1rSyu3p5U7sJvGXTPek5Xw5XazEPSoqjRF4kZXZ8Fx21swXfAvhqFpP4gS1mwZWWUUEWnQDj2Pl5e7RFVm_yvDMwAmvDfRoQLB5JVB51W5X5bdt_Ncr1hzrVUEayfMcn9hI88nRDgRwspnxmqWppf8oMV1k_nD_OigK9dqYkbMgPDolMU1KuLfLpHaGFmIQB0hcMGvvRYX7SgCK4xOZxC9N4UAsDXxXoOSdDUhVSZjwFZLlRdAlHfUkmV1J8BPouFtln7NZCJ0guaQWWAJh1T4ORHnzLrc4fBn-z6Og0W750ePGQQumczSm7Qz7MVWVuk2kCVFRftMETxDbu40luy6sTviLNoaK","endpoint_public_cert":"MIIEwjCCAyqgAwIBAgIIKvp7PY4pl4swDQYJKoZIhvcNAQELBQAwHjEcMBoGA1UEAwwTdnBhenI3MTEtZGwtbWFzdGVyMDAeFw0yMDAyMjIwMDMyNDlaFw0yMTAyMjEyMzU5NTlaMFsxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTE/MD0GA1UEAww2dnBhenI3MTEtZGwtaWRicm9rZXIxLnZwYXpyNzExLnhjdTItOHk4eC5kZXYuY2xkci53b3JrMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEA4eoV1REdkgcG1UUDuDztuG05SODqt1bowYrB+urqxlWj+LoEd28hw9kLDlld6ehwqjXO5zeNmEINSC73GWjdSVeZtQf+luAY8g9CluqLtrwYGK4KzmtqofexJtiPEAUxU//7p+9IM6BevdXlruVK7FXLdWeFRMY7zkK6Jn/obegDkH98EH1m5K4YXAM+AdF8b6UAnx55cEPRPe9rPFT67fNGapwC8hcjJkhR0K44KSNyPQFwlk4vkwDDMcT/5kg5O1Dg3DeOzNwdWjSPZ/MlJqvOBEJA/9Wb+ABmfPF5x1SuWmyIUC+MTQg7FxerhAwRN5bj//PKFcNmQahSaCNLf/Iotl3hS9g78XyaT/JnuPQTt66f17nKxgAWrdqeVSnRaBFpk3YqLF9xVvSiG8tZKD+FdIpWZUzzCfKHnDBzzzrnINccFtt2pjDS5eerhVHCuBOVRwMuCsCUISLZIJW8MxdnG5bIYHzUpS3p4g20YyfaUCLUMgHgL+W0rJ96H+ivAgMBAAGjgcYwgcMwDAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUJouEjzxJd3+CapJhO5SgkQusFqMwHwYDVR0jBBgwFoAU3TCHxHKR71VGxAWVjsT/faV7W8EwDgYDVR0PAQH/BAQDAgOoMCAGA1UdJQEB/wQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBBBgNVHREEOjA4gjZ2cGF6cjcxMS1kbC1pZGJyb2tlcjEudnBhenI3MTEueGN1Mi04eTh4LmRldi5jbGRyLndvcmswDQYJKoZIhvcNAQELBQADggGBAB5xtACkUE7Les05Nu9u9T09afrKwhyyDcLH3RZuOcGUp1cJxI05mnj8zx0OB1NsDZpvJjot4J8XLC7W2/TgpEhoWZuf1AnIpaNxwr7Tmh4K8xGx3Z9pMywCpWNS6Mey5QrxJiKUwjWQWu3qVw3nAGLoVvlQ3jbql04UIW8AH0gn47cpnJh/YggI8WT98J7nqLORuriEdfnXDpH/MxLUN3JdNc3c0S1L4RAmeUEK9cYdcL8FAQIG4g2wluxtjsx0r/SWgGxdNgba7nWBjxOm4AQvBCsFM8fNB4sfwgPUN3bpNC7dg9EIhfUyEzcMknI+UI1diR/2cMqYBXyjmLLtM9y2pWw4Fr3TP6TEOidvLbnhIXV8SpSZN4HX5hEPL8UTXmiRvBiuqY9fO+VA5bh9UXfmMP8fidPeuvThlvds8XY7jqV87j9VIqBEETEAqgSsAo7ccR4REdXtZEFadrxz71SyfP3YCSx2I5q1VcjwBQzmDryR7XxmIyiU20pJcH76OA==","token_type":"Bearer","expires_in":1583523568474}
+
+
+
+
+ACCESS TOKEN
+
+{"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiJodHRwczovL3N0b3JhZ2UuYXp1cmUuY29tLyIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0L2Y2MzZlMWM0LTE4YTUtNGY4YS05ZTQxLWUyNDdiYWUxMzg3ZC8iLCJpYXQiOjE1ODM1MjAxMDEsIm5iZiI6MTU4MzUyMDEwMSwiZXhwIjoxNTgzNTQ5MjAxLCJhaW8iOiI0Mk5nWUpoMjJPcVBGZjlxYWQzWjcyTlZMRGRZQWdBPSIsImFwcGlkIjoiY2E3YTM1MzYtNDQzNy00NzIxLTlmNWMtMGZhNzMzYThhYWQ4IiwiYXBwaWRhY3IiOiIyIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvZjYzNmUxYzQtMThhNS00ZjhhLTllNDEtZTI0N2JhZTEzODdkLyIsIm9pZCI6ImU4NmQxNTk2LTc4ZWItNDcxZi05ZDc4LTZiN2NlODIwZWYzMyIsInN1YiI6ImU4NmQxNTk2LTc4ZWItNDcxZi05ZDc4LTZiN2NlODIwZWYzMyIsInRpZCI6ImY2MzZlMWM0LTE4YTUtNGY4YS05ZTQxLWUyNDdiYWUxMzg3ZCIsInV0aSI6InZMOXFmaUZhOUVlZ0lUTTVFYlFKQUEiLCJ2ZXIiOiIxLjAiLCJ4bXNfbWlyaWQiOiIvc3Vic2NyaXB0aW9ucy9lNTFjZWNlZi0xNTk4LTRiZmQtYTBlMS05ZDc4MTY3ZGZhY2IvcmVzb3VyY2Vncm91cHMvcmFuZ2VyL3Byb3ZpZGVycy9NaWNyb3NvZnQuTWFuYWdlZElkZW50aXR5L3VzZXJBc3NpZ25lZElkZW50aXRpZXMvcmFuZ2VycmF6In0.l4as4JVRnQizejJqHHosUGSyim1HknLNAkhnWMACnEyytWZUgqcdyV7TAT24xhTSsND4vehuZpOQdhc9SfDqWlXHRducZl7uBLaCuuXU_bpVdSa5_-4jeyu4G4g2iGJQimRfU5OrrNhVAowWQUCEj-cPOh5iw-Oci7Qx1sG-Tc1llBPeluJH7wO5ycOaU7ROnbcHqKpDoK3E1zpGiAP74u-3vjU32-E7zT6a2-u8v33-v-ZvTpC2-ustWzoF5Od7T-hGc4y9PqVhm-yjAQ1ZFVchbh7U1lu6NQZxN5MQ493cwZQUt2U78mZUCfrtHWTDFP8ZucAOdsz1fB55soBi8w","client_id":"ca7a3536-4437-4721-9f5c-0fa733a8aad8","expires_in":"28799","expires_on":"1583549201","ext_expires_in":"28799","not_before":"1583520101","resource":"https://storage.azure.com/","token_type":”Bearer"
+
+
+
+
+   55  kinit -kt /var/run/cloudera-scm-agent/process/1546352463-ranger_raz-RANGER_RAZ_SERVER/ranger_raz.keytab rangerraz/razranger-dl-master1.razrange.xcu2-8y8x.dev.cldr.work@RAZRANGE.XCU2-8Y8X.DEV.CLDR.WORK
+   56  DT=$(curl --negotiate -u : "https://razranger-dl-idbroker0.razrange.xcu2-8y8x.dev.cldr.work:8444/gateway/dt/knoxtoken/api/v1/token"| jq -r '.access_token')
+   57  AT=$(curl -k -H "Authorization: Bearer $DT" 'https://razranger-dl-idbroker0.razrange.xcu2-8y8x.dev.cldr.work:8444/gateway/azure-cab/cab/api/v1/credentials'| jq -r '.access_token')
+   58  curl -v -i -X POST -d @/tmp/sasPost.xml -H "x-ms-version: 2018-11-09" -H "Authorization: Bearer $AT" "https://razrangersan.blob.core.windows.net/?restype=service&comp=userdelegationkey”
+
+
+
+<?xml version="1.0" encoding="utf-8"?><UserDelegationKey><SignedOid>728a8504-b0ed-41c4-80dd-a387a34a335a</SignedOid><SignedTid>f636e1c4-18a5-4f8a-9e41-e247bae1387d</SignedTid><SignedStart>2020-03-23T06:53:22Z</SignedStart><SignedExpiry>2020-03-26T12:00:00Z</SignedExpiry><SignedService>b</SignedService><SignedVersion>2018-11-09</SignedVersion><Value>iBu5/ILOqp9/402ot6/uPLTeOFtfH45YEtSLI0/4GuA=</Value></UserDelegationKey>
+
+
+
+SSL
+
+/usr/lib/jvm/java/bin/java -cp '/opt/cloudera/parcels/CDH-7.1.1-1.cdh7.1.1.p0.2112574/lib/ranger-raz/libext/adls/processor/*' org.apache.ranger.credentialapi.buildks list -provider jceks://file/var/run/cloudera-scm-agent/process/1546335337-ranger_raz-RANGER_RAZ_SERVER/ranger-raz-conf/rangerpluginssl.jceks
+
+ export HADOOP_ROOT_LOGGER=DEBUG,console
+
+
+Spolavarapu - 2d170119-c65f-4a8d-a9de-2d9ca57e2327
+rmani - 86415f52-4426-4746-830a-90e2059d99e6
+
+
+
+
+ACCES FILESYSTEM with DT
+
+Login to server, ssh -i hw-qe-keypair.pem root@kg-raz-b-2.kg-raz-b.root.hwx.site
+Change user, su atlas
+Get kerberos identity, kinit -kt /cdep/keytabs/atlas.keytab atlas@ROOT.HWX.SITE
+Fetch Ranger Raz DT, hdfs fetchdt --renewer atlas -fs abfs://data@vpazr711san.dfs.core.windows.net/ /tmp/atlas-raz.dt
+Destroy kerberos identity, kdestroy
+Change user to root, exit
+Set log level to debug, export HADOOP_ROOT_LOGGER=DEBUG,console
+Set file from where DT will be fetched, export HADOOP_TOKEN_FILE_LOCATION=/tmp/atlas-raz.dt
+Access using DT, hdfs dfs -ls abfs://data@vpazr711san.dfs.core.windows.net/ranger
+Exit from server, exit
+
+
+
+curl -ivk -H "Accept-Charset: utf-8" -H "x-ms-version: 2018-11-09" -H "Accept: application/json, application/octet-sfc5e923-cc1f-491e-9373-d3ca3d042d16" -X HEAD "https://razrangersan.blob.core.windows.net/data//?upn=false&action=getAccessControl&timeout=90&?st=2020-03-18T17%3A17%3A56Z&sv=2018-11-09&ske=2020-03-22T12%3A00%3A00Z&sig=ACjehtTo30qJxhzuU9g/Hhj6s%2BN6wgXHQSueSMFj8J4%3D&sktid=f636e1c4-18a5-4f8a-9e41-e247bae1387d&se=2020-03-18T22%3A17%3A56Z&skoid=728a8504-b0ed-41c4-80dd-a387a34a335a&sks=b&sp=r&skt=2020-03-18T16%3A54%3A55Z&saoid=2d170119-c65f-4a8d-a9de-2d9ca57e2327&skv=2018-11-09&sr=c"
+
+
+OffsetDateTime.parse("20150101", DateTimeFormatter.ofPattern("yyyyMMdd"));
+String dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z’";
+
+Instant.from((new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd'T'HH':'mm'Z'").parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0).parseDefaulting(ChronoField.NANO_OF_SECOND, 0).toFormatter().withZone(ZoneId.of("UTC"))).parse(string));
+
+
+
+ranger.raz.adls.user.delegation.key.oid   = 728a8504-b0ed-41c4-80dd-a387a34a335a
+
+ranger.raz.adls.user.delegation.key.tid   = f636e1c4-18a5-4f8a-9e41-e247bae1387d
+
+ranger.raz.adls.user.delegation.key.start  = 2020-03-19T04:33:37Z
+
+ranger.raz.adls.user.delegation.key.expiry  = 2020-03-22T12:00:00Z
+ranger.raz.adls.user.delegation.key.service = b
+ranger.raz.adls.user.delegation.key.value = IAWlTK9Gi+IQ0JKM5pSEaFogNmd52hnhiO4l1AQDc6c=
+
+
+Kishor’s Cluster
+
+http://kg-raz-b-1.kg-raz-b.root.hwx.site:7180/cmf/services/1546332453/status
+
+
+CDEP:
+http://rmani-rmh-1.rmani-rmh.root.hwx.site:7180/cmf/services/20/status
+
+
+
+CORE SITE:
+
+fs.azure.account.auth.type=SAS
+fs.azure.sas.token.provider.type=org.apache.ranger.raz.hook.abfs.RangerRazTokenProvider
+fs.azure.enable.delegation.token=true
+fs.azure.delegation.token.provider.type=org.apache.ranger.raz.hook.abfs.RazDelegationTokenManager
+ranger.raz.client.prefix=fs.azue.ext.raz.
+fs.azue.ext.raz.rest.host.url=http://kg-raz-b-2.kg-raz-b.root.hwx.site:6081
+fs.azue.ext.raz.delegation-token.token-kind=ABFS delegation
+fs.azure.ext.raz.rest.ssl.config.file=/tmp/ranger-raz-policymgr-ssl.xml
+
+
+Expiry date: "2020-03-26T12:00:00Z”
+
+/*
+private String getKeyInfo(String expiryDate) throws IOException {
+    String    ret     = null;
+    KeyInfo   keyInfo = new KeyInfo().withExpiry(expiryDate);
+    XmlMapper mapper  = new XmlMapper();
+    ret               = mapper.writeValueAsString(keyInfo);
+    return ret;
+}*/
+
+
+<?xml version="1.0" encoding="utf-8"?><UserDelegationKey><SignedOid>728a8504-b0ed-41c4-80dd-a387a34a335a</SignedOid><SignedTid>f636e1c4-18a5-4f8a-9e41-e247bae1387d</SignedTid><SignedStart>2020-04-14T18:14:31Z</SignedStart><SignedExpiry>2020-04-21T12:00:00Z</SignedExpiry><SignedService>b</SignedService><SignedVersion>2018-11-09</SignedVersion><Value>7irdDVewd2kuSYPZQkznwXzfIfldetxJAh/rGdDgEDE=</Value></UserDelegationKey>
+
+CLASSPATH
+
+/var/run/cloudera-scm-agent/process/1546517760-ranger_raz-RANGER_RAZ_SERVER/ranger-raz-conf:/opt/cloudera/parcels/CDH-7.1.1-1.cdh7.1.1.p0.2112574/lib/ranger-raz/webapp/ranger-raz/WEB-INF/classes:/opt/cloudera/parcels/CDH-7.1.1-1.cdh7.1.1.p0.2112574/lib/ranger-raz/webapp/ranger-raz/WEB-INF/lib/*:/etc/alternatives/hadoop-conf/*:
+
+
+
+./setup_env.sh -e rmaniraz -p admin123 -l rmaniraz-dl -c -a -k 
+
+
+kinit -kt /var/run/cloudera-scm-agent/process/1546352463-ranger_raz-RANGER_RAZ_SERVER/ranger_raz.keytab rangerraz/razranger-dl-master1.razrange.xcu2-8y8x.dev.cldr.work@RAZRANGE.XCU2-8Y8X.DEV.CLDR.WORK
+   56  DT=$(curl --negotiate -u : "https://kg-rz-e-1.kg-rz-e.root.hwx.site:8444/gateway/dt/knoxtoken/api/v1/token"| jq -r '.access_token')
+   57  AT=$(curl -k -H "Authorization: Bearer $DT" 'https://razranger-dl-idbroker0.razrange.xcu2-8y8x.dev.cldr.work:8444/gateway/azure-cab/cab/api/v1/credentials'| jq -r '.access_token')
+   58  curl -v -i -X POST -d @/tmp/sasPost.xml -H "x-ms-version: 2018-11-09" -H "Authorization: Bearer $AT" "https://razrangersan.blob.core.windows.net/?restype=service&comp=userdelegationkey”
+
+
+https://www.google.com/url?q=https://teams.microsoft.com/l/meetup-join/19%253ameeting_ZTg3ZGRiYWUtYjkyMi00OGJhLThhZjItZWIxM2RhZmM2ZDc2%2540thread.v2/0?context%3D%257b%2522Tid%2522%253a%252272f988bf-86f1-41af-91ab-2d7cd011db47%2522%252c%2522Oid%2522%253a%25222868e1b6-fd1a-446e-9256-4fbfa911caba%2522%257d&sa=D&ust=1587399553331000&usg=AOvVaw2dr7Do2ix0SvwQJAGaz7Tq
+
+
+
+## Get RAZ delegation token
+kinit -kt atlas.keytab atlas
+hdfs fetchdt --renewer atlas -fs abfs://data@razrangersan.dfs.core.windows.net/ /tmp/raz/ranger-raz-atlas.dt
+kdestroy
+## Renew RAZ delegation token
+kinit -kt atlas.keytab atlas
+hdfs fetchdt --renew -fs abfs://data@razrangersan.dfs.core.windows.net/ /tmp/raz/ranger-raz-atlas.dt
+kdestroy
+## Cancel RAZ delegation token
+kinit -kt atlas.keytab atlas
+hdfs fetchdt --cancel -fs abfs://data@razrangersan.dfs.core.windows.net/ /tmp/raz/ranger-raz-atlas.dt
+destroy
+
+
++: ${CMVERSION="3172083"}
++: ${CDHVERSION="3181100"}
+
+
+
+#
+: ${CMVERSION="2674667"}
+: ${CDHVERSION="2674852”}
+
+
+AZURE SERVICE PRINCIPAL
+name: rangerraz
+Application (client)  ID: fe0be40a-df66-43d8-b25b-126e76eb9a0f
+Tenant ID ( directory) ID : fce84054-b9ea-4efc-af17-1d08b8156f22
+Object ID                          : 91ef2cb7-b852-4d21-a2c7-f0b533ddb491
+secret 
+Expiry : 12/31/2299
+NW]00esm7LKaXE4@OkSvpRKmmf:imdc?
+
+
+azure-cab.json
+{
+{
+  "provider-config-ref": "cab-providers",
+  "services": [
+    {
+      "name": "IDBROKER",
+      "params": {
+        "cloud.policy.config.provider": "default",
+        "cloud.client.provider": "ADLS2",
+        "azure.vm.assumer.identity": "/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/assumerIdentity",
+        "azure.adls2.tenantname" : "abfsranger.onmicrosoft.com",
+        "role.user.rangerraz" : "blob-owner",
+        "role.group.rangerraz": "blob-owner",
+        "role.user.rangerraz" : "blob-delegator",
+        "role.group.rangerraz": "blob-delegator",
+        "azure.adls2.credential.blob-owner.clientid" : "fe0be40a-df66-43d8-b25b-126e76eb9a0f",
+        "azure.adls2.credentail.blob-owner.secret" : "NW]00esm7LKaXE4@OkSvpRKmmf:imdc?",
+        "azure.adls2.credential.blob-delegator.clientid" : "fe0be40a-df66-43d8-b25b-126e76eb9a0f",
+        "azure.adls2.credentail.blob-delegator.secret" : "NW]00esm7LKaXE4@OkSvpRKmmf:imdc?
+      }
+    }
+  ]
+}
+
+OLD VALUES
+
+Knox IDBroker AZURE VM Assumer Identity
+/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/assumerIdentity
+
+Knox IDBroker AZURE User Mapping
+hive=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;atlas=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;nifiregistry=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;kudu=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;zeppelin=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;impala=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;nifi=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;dpprofiler=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;kafka=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;solr=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;hdfs=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;hue=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;yarn=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;schemaregistry=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;hbase=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity;knox=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity
+Knox IDBroker Default Group Settings
+
+cdp_rm72test=/subscriptions/e51cecef-1598-4bfd-a0e1-9d78167dfacb/resourceGroups/rm72test-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adminIdentity
+
+ranger admin
+_c_ranger_admins_34fda6d8
+
+
+
+
+
+
+
+
+
