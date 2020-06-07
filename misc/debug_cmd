@@ -1,0 +1,14 @@
+debug
+
+
+loggers = Ranger
+logger.Ranger.name = org.apache.ranger
+logger.Ranger.level = DEBUG
+
+or 
+ log4j.logger.org.apache.ranger=DEBUG
+
+or
+
+log4j.category.org.apache.ranger=debug, drfa
+
