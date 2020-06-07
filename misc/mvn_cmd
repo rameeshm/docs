@@ -1,0 +1,6 @@
+
+examples:
+
+mvn dependency:tree -Dverbose -Dincludes=javax.ws.rs:javax.ws.rs-api
+
+
